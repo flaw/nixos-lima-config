@@ -41,6 +41,39 @@ limactl shell nixos
 
 **NOTE**: Both setup scripts use `git clone` to fetch configurations from the default branch of `https://github.com/flaw/nixos-lima-config.git`. Local changes to the `*.nix` files will not be seen by the guest until you push them to that branch. To use a different configuration repository, pass its URL as the third argument (`config-repo`) to either script.
 
+## Updating an existing VM
+
+Commit and push your configuration changes, then run on the host:
+
+```bash
+./update-nixos.sh nixos
+```
+
+This pulls the existing `/etc/nixos` checkout with `git pull --ff-only` and runs
+`nixos-rebuild switch`. If the pull fails, the rebuild is not run. The default
+configuration is `nixos-aarch64`; for an x86_64 guest, use:
+
+```bash
+./update-nixos.sh nixos nixos-x86_64
+```
+
+The helper uses the guest checkout's existing remote. If the guest was originally
+set up using the upstream repository, point it at this fork first:
+
+```bash
+limactl shell nixos -- sudo git -C /etc/nixos remote set-url origin \
+  https://github.com/flaw/nixos-lima-config.git
+```
+
+Most changes activate immediately. For kernel or boot-related changes, restart:
+
+```bash
+limactl restart nixos
+```
+
+Use `setup-nixos.sh` only for initial setup, not updates. This helper does not
+apply Home Manager changes.
+
 ## Help Wanted
 
 Feedback, issues, and pull-requests are all most welcome.
