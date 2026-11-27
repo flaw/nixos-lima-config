@@ -1,13 +1,13 @@
 { config, modulesPath, pkgs, lib, ... }:
 {
     #
-    # This is a sample configuration module for a NixOS Lima VM
+    # Configuration module for a NixOS Lima VM
     #
     imports = [
       (modulesPath + "/profiles/qemu-guest.nix")
     ];
 
-    networking.hostName = "nixsample";
+    networking.hostName = "nixos";
 
     # TODO: Consider setting some/all of the mandatory settings in `nixos-lima.nixosModules.lima`
 

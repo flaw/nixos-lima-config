@@ -1,5 +1,5 @@
 {
-  description = "A sample NixOS-on-Lima configuration flake";
+  description = "NixOS-on-Lima configuration flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
@@ -19,14 +19,14 @@
       system = "aarch64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-        nixosConfigurations.nixsample-aarch64 = nixpkgs.lib.nixosSystem {
+        nixosConfigurations.nixos-aarch64 = nixpkgs.lib.nixosSystem {
           system = "aarch64-linux";
           modules = [
             nixos-lima.nixosModules.lima
             ./nixos-lima-config.nix
           ];
         };
-        nixosConfigurations.nixsample-x86_64 = nixpkgs.lib.nixosSystem {
+        nixosConfigurations.nixos-x86_64 = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             nixos-lima.nixosModules.lima

@@ -4,9 +4,9 @@
 # a Home Manager configuration from a Git repo and initializing Home Manager.
 set -eux
 
-# Git Repo containing a flake.nix containing Home Manager configurations
-# In the sample the repo is the same as the NixOS configuration repo, but they can be different
-DEFAULT_CONFIG_REPO='https://github.com/nixos-lima/nixos-lima-config-sample.git'
+# Git repo containing a flake.nix containing Home Manager configurations
+# By default, this is the same repository used for NixOS configuration.
+DEFAULT_CONFIG_REPO='https://github.com/flaw/nixos-lima-config.git'
 
 display_help() {
     echo

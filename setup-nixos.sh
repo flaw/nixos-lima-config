@@ -4,10 +4,10 @@
 set -eux
 
 # Name of NixOS default configuration to apply (from the repo's flake.nix)
-DEFAULT_CONFIG_NAME='nixsample'
-# Git Repo containing a flake.nix containing NixOS configurations
-# In the sample the repo is the same as Home Manager repo, but they can be different
-DEFAULT_CONFIG_REPO='https://github.com/nixos-lima/nixos-lima-config-sample.git'
+DEFAULT_CONFIG_NAME='nixos-aarch64'
+# Git repo containing a flake.nix containing NixOS configurations
+# By default, this is the same repository used for Home Manager.
+DEFAULT_CONFIG_REPO='https://github.com/flaw/nixos-lima-config.git'
 
 display_help() {
     echo

@@ -1,12 +1,12 @@
-# nixos-lima-config-sample
+# nixos-lima-config
 
-A sample NixOS configuration flake that uses the [nixos-lima](https://github.com/nixos-lima/nixos-lima) module to enable running NixOS within a [Lima](https://lima-vm.io)-managed VM on macOS and Linux.
+A NixOS configuration flake that uses the [nixos-lima](https://github.com/nixos-lima/nixos-lima) module to enable running NixOS within a [Lima](https://lima-vm.io)-managed VM on macOS and Linux.
 
-This repository can be used as a template for your custom NixOS Lima VM configuration. Because it references the `nixos-lima` module, you should be able to update to new and improved versions while maintaining the configuration of your VM separately/privately.
-   
- The sample BASH scripts `setup-nixos.sh` and `setup-home-manager.sh` are used to check out Git repositories for Home Manager and NixOS system configuration, respectively and to build/switch to that configuration. These mechanisms allow you to configure and manage a NixOS Lima VM and track changes in a Git repository.
+This repository maintains the NixOS Lima VM configuration separately from the upstream `nixos-lima` module, allowing the module to be updated independently.
 
-This example uses the latest base image release from [nixos-lima](https://github.com/nixos-lima/nixos-lima).
+The Bash scripts `setup-nixos.sh` and `setup-home-manager.sh` check out Git repositories for NixOS system configuration and Home Manager, respectively, and apply those configurations. Both default to [flaw/nixos-lima-config](https://github.com/flaw/nixos-lima-config).
+
+This configuration uses base images released by [nixos-lima](https://github.com/nixos-lima/nixos-lima).
 
 ## Prerequisites
 
@@ -20,15 +20,17 @@ Check out this repository to your Lima host. The following commands can be used 
 
 ```
 limactl start --yes --set '.user.name = "lima"' nixos.yaml
-./setup-nixos.sh nixos nixsample-aarch64
+./setup-nixos.sh nixos nixos-aarch64
 ./setup-home-manager.sh nixos lima
 ```
 
-If you create a fork or copy of this repo, or use your own Home Manager flake, you can use the same username as you use on the host system, making the commands simpler:
+The default NixOS configuration is `nixos-aarch64`. On an x86_64 host, pass `nixos-x86_64` instead.
+
+To use your host username in the guest, first update the Home Manager configuration name, `home.username`, and `home.homeDirectory` in `flake.nix` to match and push those changes to the fork. Then run:
 
 ```
 limactl start --yes nixos.yaml
-./setup-nixos.sh nixos nixsample-aarch64
+./setup-nixos.sh nixos nixos-aarch64
 ./setup-home-manager.sh nixos $USER
 ```
 You can then log in to your NixOS guest VM using:
@@ -37,7 +39,7 @@ You can then log in to your NixOS guest VM using:
 limactl shell nixos
 ```
 
-**NOTE**: By default, both `setup-nixos.sh` and `setup-home-manager.sh` use `git clone` to fetch their Nix flake configurations directly from the `master` branch of _this_ repository. Local changes to a checkout of the `*.nix` files will not be seen until you push them to your own remote Git repo *and* either change `DEFAULT_CONFIG_REPO` in the scripts or use the scripts `config-repo` parameter to override `DEFAULT_CONFIG_REPO`.
+**NOTE**: Both setup scripts use `git clone` to fetch configurations from the default branch of `https://github.com/flaw/nixos-lima-config.git`. Local changes to the `*.nix` files will not be seen by the guest until you push them to that branch. To use a different configuration repository, pass its URL as the third argument (`config-repo`) to either script.
 
 ## Help Wanted
 
