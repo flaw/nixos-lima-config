@@ -57,10 +57,11 @@ in
     environment.systemPackages = with pkgs; [
       nextvi # small version of vi
       gitMinimal # minimal version of git, needed by setup-home-manager.sh
-      uv
-      bun
       kitty.terminfo
-      unstablePkgs.pi-coding-agent # Keep pi current without moving the system to unstable
+      # Keep development tools current without moving the system to unstable.
+      unstablePkgs.uv
+      unstablePkgs.bun
+      unstablePkgs.pi-coding-agent
       localPackages.check-config-reboot
       localPackages.sync-config
     ];
