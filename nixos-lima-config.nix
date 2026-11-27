@@ -60,6 +60,7 @@ in
       uv
       bun
       kitty.terminfo
+      pi-coding-agent
       localPackages.check-config-reboot
       localPackages.sync-config
     ];
