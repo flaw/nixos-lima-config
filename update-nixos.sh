@@ -32,4 +32,4 @@ echo "Configuration switched."
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 limactl shell "$GUEST_HOST_NAME" -- bash -s -- \
     /run/booted-system /run/current-system "limactl restart $GUEST_HOST_NAME" \
-    < "$SCRIPT_DIR/check-config-reboot.sh"
+    < "$SCRIPT_DIR/nix/packages/check-config-reboot/check-config-reboot.sh"

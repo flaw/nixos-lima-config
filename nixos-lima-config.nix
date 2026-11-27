@@ -1,10 +1,6 @@
 { config, modulesPath, pkgs, lib, ... }:
 let
-    rebootCheck = pkgs.writeShellApplication {
-      name = "check-config-reboot";
-      runtimeInputs = [ pkgs.coreutils pkgs.diffutils ];
-      text = builtins.readFile ./check-config-reboot.sh;
-    };
+    localPackages = import ./nix/packages { inherit pkgs; };
 in
 {
     #
@@ -64,30 +60,8 @@ in
       uv
       bun
       kitty.terminfo
-      rebootCheck
-      (pkgs.writeShellApplication {
-        name = "sync-config";
-        runtimeInputs = [ pkgs.gitMinimal pkgs.nixos-rebuild rebootCheck ];
-        text = ''
-          if [[ ''${1:-} == --help || ''${1:-} == -h ]]; then
-            echo "Usage: sync-config [config-name]"
-            echo "Default config-name: nixos"
-            exit 0
-          fi
-
-          if [[ $# -gt 1 ]]; then
-            echo "Usage: sync-config [config-name]" >&2
-            exit 1
-          fi
-
-          config_name=''${1:-nixos}
-          sudo git -C /etc/nixos pull --ff-only
-          sudo nixos-rebuild switch --flake "/etc/nixos#$config_name"
-
-          echo "Configuration switched."
-          check-config-reboot
-        '';
-      })
+      localPackages.check-config-reboot
+      localPackages.sync-config
     ];
 
     # The usual warnings about changing `stateVersion` apply. Make sure to find and read them
