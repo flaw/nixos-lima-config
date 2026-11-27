@@ -56,6 +56,7 @@
       gitMinimal # minimal version of git, needed by setup-home-manager.sh
       uv
       bun
+      kitty.terminfo
     ];
 
     # The usual warnings about changing `stateVersion` apply. Make sure to find and read them
