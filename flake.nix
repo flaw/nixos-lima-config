@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos-lima = {
       url = "github:nixos-lima/nixos-lima/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,13 +14,16 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-lima, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-lima, home-manager, ... }@inputs:
     let
       system = "aarch64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
         nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
           inherit system;
+          specialArgs = {
+            unstablePkgs = nixpkgs-unstable.legacyPackages.${system};
+          };
           modules = [
             nixos-lima.nixosModules.lima
             ./nixos-lima-config.nix

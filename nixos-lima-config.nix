@@ -1,4 +1,4 @@
-{ config, modulesPath, pkgs, lib, ... }:
+{ config, modulesPath, pkgs, unstablePkgs, lib, ... }:
 let
     localPackages = import ./nix/packages { inherit pkgs; };
 in
@@ -60,7 +60,7 @@ in
       uv
       bun
       kitty.terminfo
-      pi-coding-agent
+      unstablePkgs.pi-coding-agent # Keep pi current without moving the system to unstable
       localPackages.check-config-reboot
       localPackages.sync-config
     ];
