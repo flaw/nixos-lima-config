@@ -2,7 +2,7 @@
 # Update an existing Lima-NixOS guest from its configuration repository.
 set -euo pipefail
 
-DEFAULT_CONFIG_NAME='nixos-aarch64'
+DEFAULT_CONFIG_NAME='nixos'
 
 display_help() {
     echo "Usage: $0 guest-hostname [config-name]"

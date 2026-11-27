@@ -15,19 +15,11 @@
 
   outputs = { self, nixpkgs, nixos-lima, home-manager, ... }@inputs:
     let
-      # Change this to "x86_64-linux" if necessary
       system = "aarch64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-        nixosConfigurations.nixos-aarch64 = nixpkgs.lib.nixosSystem {
-          system = "aarch64-linux";
-          modules = [
-            nixos-lima.nixosModules.lima
-            ./nixos-lima-config.nix
-          ];
-        };
-        nixosConfigurations.nixos-x86_64 = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+        nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+          inherit system;
           modules = [
             nixos-lima.nixosModules.lima
             ./nixos-lima-config.nix
