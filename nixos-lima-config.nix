@@ -54,6 +54,8 @@
     environment.systemPackages = with pkgs; [
       nextvi # small version of vi
       gitMinimal # minimal version of git, needed by setup-home-manager.sh
+      uv
+      bun
     ];
 
     # The usual warnings about changing `stateVersion` apply. Make sure to find and read them
