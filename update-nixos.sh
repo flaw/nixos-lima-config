@@ -27,4 +27,9 @@ limactl shell "$GUEST_HOST_NAME" -- sudo git -C /etc/nixos pull --ff-only
 limactl shell "$GUEST_HOST_NAME" -- sudo nixos-rebuild switch \
     --flake "/etc/nixos#$GUEST_CONFIG_NAME"
 
-echo "Configuration switched. Kernel or boot-related changes may require: limactl restart $GUEST_HOST_NAME"
+echo "Configuration switched."
+# Send the checker so this also works before it is installed in the guest.
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+limactl shell "$GUEST_HOST_NAME" -- bash -s -- \
+    /run/booted-system /run/current-system "limactl restart $GUEST_HOST_NAME" \
+    < "$SCRIPT_DIR/check-config-reboot.sh"

@@ -1,4 +1,11 @@
 { config, modulesPath, pkgs, lib, ... }:
+let
+    rebootCheck = pkgs.writeShellApplication {
+      name = "check-config-reboot";
+      runtimeInputs = [ pkgs.coreutils pkgs.diffutils ];
+      text = builtins.readFile ./check-config-reboot.sh;
+    };
+in
 {
     #
     # Configuration module for a NixOS Lima VM
@@ -57,9 +64,10 @@
       uv
       bun
       kitty.terminfo
+      rebootCheck
       (pkgs.writeShellApplication {
         name = "sync-config";
-        runtimeInputs = [ pkgs.gitMinimal pkgs.nixos-rebuild ];
+        runtimeInputs = [ pkgs.gitMinimal pkgs.nixos-rebuild rebootCheck ];
         text = ''
           if [[ ''${1:-} == --help || ''${1:-} == -h ]]; then
             echo "Usage: sync-config [config-name]"
@@ -76,7 +84,8 @@
           sudo git -C /etc/nixos pull --ff-only
           sudo nixos-rebuild switch --flake "/etc/nixos#$config_name"
 
-          echo "Configuration switched. Kernel or boot-related changes may require a reboot."
+          echo "Configuration switched."
+          check-config-reboot
         '';
       })
     ];

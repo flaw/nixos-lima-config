@@ -65,7 +65,18 @@ limactl shell nixos -- sudo git -C /etc/nixos remote set-url origin \
   https://github.com/flaw/nixos-lima-config.git
 ```
 
-Most changes activate immediately. For kernel or boot-related changes, restart:
+After switching, both update commands compare `/run/booted-system` with
+`/run/current-system` for changes to the kernel, kernel modules, initrd, and
+kernel parameters. If any differ, they print a reboot recommendation and the
+command to use. This also detects a reboot still pending from an earlier update.
+Most other changes activate immediately.
+
+This is a conservative check, not an exhaustive detector: bootloader settings,
+firmware, and other boot-time changes outside those artifacts may still require
+a reboot. Missing kernel artifacts produce an "unknown" status rather than a
+false all-clear. Neither command reboots automatically.
+
+To restart from the host:
 
 ```bash
 limactl restart nixos
@@ -88,6 +99,12 @@ Like the host helper, it pulls `/etc/nixos` with `--ff-only` and then runs
 `nixos-rebuild switch`, using `sudo`. Push your changes first; it uses the guest
 checkout's existing remote and stops if the pull fails. It does not reboot
 automatically.
+
+You can also check reboot status inside the guest at any time:
+
+```bash
+check-config-reboot
+```
 
 Use `setup-nixos.sh` only for initial setup, not updates. Neither update command
 applies Home Manager changes.
